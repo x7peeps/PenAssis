@@ -1,2 +1,2 @@
-# PenAss
+# PenAssis
 Some daly helper tools for pentester.
