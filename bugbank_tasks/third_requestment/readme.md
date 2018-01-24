@@ -1,0 +1,1 @@
+把这个webdriver放在系统变量下，如python根目录。
