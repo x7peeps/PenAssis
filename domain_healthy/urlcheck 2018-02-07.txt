@@ -1,0 +1,12 @@
+[+]20180207 16:31:49 wsjsw.qingdao.gov.cn
+[+]20180207 16:31:49 [+]http://wsjsw.qingdao.gov.cn
+[+]20180207 16:31:52 [+]rescode:200
+[+]20180207 16:31:52 [+]https://wsjsw.qingdao.gov.cn
+[+]20180207 16:32:12 [+]ResponseError:Connecttion refused.
+[+]20180207 16:32:12 www.qingdao120.org
+[+]20180207 16:32:12 [+]http://www.qingdao120.org
+[+]20180207 16:32:12 [+]rescode:200
+[+]20180207 16:32:12 [+]https://www.qingdao120.org
+[+]20180207 16:32:12 [+]ResponseError:Using SSLv3 not secure.
+[+]20180207 16:32:12 www.qdjzch.com
+[+]20180207 16:32:12 [+]http://www.qdjzch.com
