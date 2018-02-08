@@ -20,7 +20,7 @@ import traceback    #需要导入traceback模块，此时获取的信息最全
 import requests
 import re
 import pdb
-
+from urllib2 import Request, urlopen, URLError, HTTPError
 
 # 解决https报错：<urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed (_ssl.c:661)>，全局证书关闭
 import ssl
@@ -75,9 +75,10 @@ def gethttp(reurl_http):
         response=urllib2.urlopen(req,timeout=18)
         page=response.read()
         # output---------
-        print 'rescode:'+str(response.getcode())+' '+'\n',
-        res_output="rescode:"+str(response.getcode())
+        print 'Response:'+str(response.getcode())+' '+'\n',
+        res_output="Response:"+str(response.getcode())
         output("[+]"+res_output)
+        #--------------------
         #
         # 实例化opener继承class SmartRedirectHandler。获取重定向地址relocation
         #
@@ -88,18 +89,36 @@ def gethttp(reurl_http):
             print "redirect:"+relocation
             output("redirect:"+str(relocation))
         return page,str(response.getcode())
-    except Exception,e:
-        print "ResponseError:",
-        #当使用不安全的sslv3连接的时候，<urlopen error [SSL: SSLV3_ALERT_HANDSHAKE_FAILURE] sslv3 alert handshake failure (_ssl.c:661)>，则报使用了不受支持的协议。
-        if str(e)=="<urlopen error [SSL: SSLV3_ALERT_HANDSHAKE_FAILURE] sslv3 alert handshake failure (_ssl.c:661)>":
-            e="Using SSLv3 not secure.[SSL: SSLV3_ALERT_HANDSHAKE_FAILURE]"
-        elif str(e)=="<urlopen error [Errno 10061] >" or str(e)=="<urlopen error [Errno 10060] >":
-            e="Connecttion refused.[Errno 10060]"
-        elif str(e)=="<urlopen error [Errno 11001] getaddrinfo failed>"
-            e="Cannot visit, no ip can't get host."
-        print e
-        output("[+]ResponseError:"+str(e))
-        return "can't connect.","error"  #防止nonetype回传
+    #
+    # response error exception reload.
+    #
+    #
+    except HTTPError, e:
+        #print 'The server couldn\'t fulfill the request.'
+        exr='Error reason: '+str(e.code)
+        print exr+' '+e.reason
+        output(exr)
+        return "can't connect.","error"
+    except URLError, e:
+        #print 'We failed to reach a server.'
+        exr='Failed reason: '+str(e.reason)
+        print exr
+        output(exr)
+        return "can't connect.","error"
+    # except Exception,e:
+    #     print "ResponseError:",
+    #     #当使用不安全的sslv3连接的时候，<urlopen error [SSL: SSLV3_ALERT_HANDSHAKE_FAILURE] sslv3 alert handshake failure (_ssl.c:661)>，则报使用了不受支持的协议。
+    #     if str(e)=="<urlopen error [SSL: SSLV3_ALERT_HANDSHAKE_FAILURE] sslv3 alert handshake failure (_ssl.c:661)>":
+    #         e="[SSL: SSLV3_ALERT_HANDSHAKE_FAILURE]Using SSLv3 not secure."
+    #     elif str(e)=="<urlopen error [Errno 10061] >" or str(e)=="<urlopen error [Errno 10060] >":
+    #         e="[Errno 10060]Connection refused."
+    #     elif str(e)=="<urlopen error [Errno 11001] getaddrinfo failed>":
+    #         e="[Errno 11001]Cannot visit, no ip can't get host."
+    #     elif str(e)=="<urlopen error timed out>":
+    #         e="Time out."
+    #     print e
+    #     output("[+]ResponseError:"+str(e))
+    #     return "can't connect.","error"  #防止nonetype回传
 
 
 
