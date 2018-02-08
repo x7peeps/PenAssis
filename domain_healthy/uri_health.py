@@ -85,7 +85,7 @@ def gethttp(reurl_http):
         #     #获取跳转之后的url
         #     res = requests.head(url)
         #     global relocation
-        #     relocation=res.headers['Location']  #全局调用的重定向relocation 
+        #     relocation=res.headers['Location']  #全局调用的重定向relocation
         #     print "jump:"+location,
         #     output("jump:"+location+'\n')
         return page,str(response.getcode())
@@ -93,9 +93,9 @@ def gethttp(reurl_http):
         print "ResponseError:",
         #当使用不安全的sslv3连接的时候，<urlopen error [SSL: SSLV3_ALERT_HANDSHAKE_FAILURE] sslv3 alert handshake failure (_ssl.c:661)>，则报使用了不受支持的协议。
         if str(e)=="<urlopen error [SSL: SSLV3_ALERT_HANDSHAKE_FAILURE] sslv3 alert handshake failure (_ssl.c:661)>":
-            e="Using SSLv3 not secure."
+            e="Using SSLv3 not secure.[SSL: SSLV3_ALERT_HANDSHAKE_FAILURE]"
         elif str(e)=="<urlopen error [Errno 10061] >" or str(e)=="<urlopen error [Errno 10060] >":
-            e="Connecttion refused."
+            e="Connecttion refused.[Errno 10060]"
         print e
         output("[+]ResponseError:"+str(e))
         return "can't connect.","error"  #防止nonetype回传
