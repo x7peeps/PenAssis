@@ -1,0 +1,105 @@
+[+]20180208 10:47:30 wsjsw.qingdao.gov.cn
+[+]20180208 10:47:30 [+]http://wsjsw.qingdao.gov.cn
+[+]20180208 10:47:32 [+]rescode:200
+[+]20180208 10:47:32 [+]https://wsjsw.qingdao.gov.cn
+[+]20180208 10:47:51 [+]ResponseError:<urlopen error timed out>
+[+]20180208 10:47:51 www.qingdao120.org
+[+]20180208 10:47:51 [+]http://www.qingdao120.org
+[+]20180208 10:47:51 [+]rescode:200
+[+]20180208 10:47:51 [+]https://www.qingdao120.org
+[+]20180208 10:47:52 [+]ResponseError:[SSL: SSLV3_ALERT_HANDSHAKE_FAILURE]Using SSLv3 not secure.
+[+]20180208 10:47:52 www.qdjzch.com
+[+]20180208 10:47:52 [+]http://www.qdjzch.com
+[+]20180208 10:47:53 [+]rescode:200
+[+]20180208 10:47:53 [+]https://www.qdjzch.com
+[+]20180208 10:47:54 [+]rescode:200
+[+]20180208 10:47:54 www.qdwsjskjzx.com
+[+]20180208 10:47:54 [+]http://www.qdwsjskjzx.com
+[+]20180208 10:47:55 [+]rescode:200
+[+]20180208 10:47:55 [+]https://www.qdwsjskjzx.com
+[+]20180208 10:48:13 [+]ResponseError:<urlopen error timed out>
+[+]20180208 10:48:13 www.sdeyei-h.edu
+[+]20180208 10:48:13 [+]http://www.sdeyei-h.edu
+[+]20180208 10:48:13 [+]ResponseError:HTTP Error 403: Forbidden
+[+]20180208 10:48:13 [+]https://www.sdeyei-h.edu
+[+]20180208 10:48:13 [+]rescode:200
+[+]20180208 10:48:13 jiaonanhospital.com
+[+]20180208 10:48:13 [+]http://jiaonanhospital.com
+[+]20180208 10:48:14 [+]rescode:200
+[+]20180208 10:48:14 [+]https://jiaonanhospital.com
+[+]20180208 10:48:14 [+]rescode:200
+[+]20180208 10:48:14 www.hdqdezyy.com
+[+]20180208 10:48:14 [+]http://www.hdqdezyy.com
+[+]20180208 10:48:15 [+]rescode:200
+[+]20180208 10:48:15 [+]https://www.hdqdezyy.com
+[+]20180208 10:48:33 [+]ResponseError:<urlopen error timed out>
+[+]20180208 10:48:33 mail.bocommlife.com
+[+]20180208 10:48:33 [+]http://mail.bocommlife.com
+[+]20180208 10:48:51 [+]ResponseError:<urlopen error timed out>
+[+]20180208 10:48:51 [+]https://mail.bocommlife.com
+[+]20180208 10:48:51 [+]rescode:200
+[+]20180208 10:48:51 qyh.bocommlife.com
+[+]20180208 10:48:51 [+]http://qyh.bocommlife.com
+[+]20180208 10:48:51 [+]rescode:200
+[+]20180208 10:48:51 [+]https://qyh.bocommlife.com
+[+]20180208 10:48:51 [+]rescode:200
+[+]20180208 10:48:51 service.bocommlife.com
+[+]20180208 10:48:51 [+]http://service.bocommlife.com
+[+]20180208 10:48:51 [+]ResponseError:HTTP Error 404: Not Found
+[+]20180208 10:48:51 [+]https://service.bocommlife.com
+[+]20180208 10:48:51 [+]ResponseError:HTTP Error 404: Not Found
+[+]20180208 10:48:51 sss.bocommlife.com
+[+]20180208 10:48:51 [+]http://sss.bocommlife.com
+[+]20180208 10:48:51 [+]ResponseError:HTTP Error 404: Not Found
+[+]20180208 10:48:51 [+]https://sss.bocommlife.com
+[+]20180208 10:48:51 [+]ResponseError:HTTP Error 404: Not Found
+[+]20180208 10:48:51 www.bocommlife.com
+[+]20180208 10:48:51 [+]http://www.bocommlife.com
+[+]20180208 10:48:52 [+]rescode:200
+[+]20180208 10:48:52 [+]https://www.bocommlife.com
+[+]20180208 10:49:10 [+]ResponseError:<urlopen error timed out>
+[+]20180208 10:49:10 wx.bocommlife.com
+[+]20180208 10:49:10 [+]http://wx.bocommlife.com
+[+]20180208 10:49:10 [+]rescode:200
+[+]20180208 10:49:10 [+]https://wx.bocommlife.com
+[+]20180208 10:49:10 [+]rescode:200
+[+]20180208 10:49:10 wxtest.bocommlife.com
+[+]20180208 10:49:10 [+]http://wxtest.bocommlife.com
+[+]20180208 10:49:10 [+]rescode:200
+[+]20180208 10:49:10 [+]https://wxtest.bocommlife.com
+[+]20180208 10:49:10 [+]rescode:200
+[+]20180208 10:49:10 ydrs.bocommlife.com
+[+]20180208 10:49:10 [+]http://ydrs.bocommlife.com
+[+]20180208 10:49:10 [+]ResponseError:HTTP Error 403: Forbidden
+[+]20180208 10:49:10 [+]https://ydrs.bocommlife.com
+[+]20180208 10:49:11 [+]ResponseError:HTTP Error 403: Forbidden
+[+]20180208 10:49:11 sftp.bocommlife.com
+[+]20180208 10:49:11 [+]http://sftp.bocommlife.com
+[+]20180208 10:49:28 [+]ResponseError:[Errno 10060]Connecttion refused.
+[+]20180208 10:49:28 [+]https://sftp.bocommlife.com
+[+]20180208 10:49:46 [+]ResponseError:<urlopen error timed out>
+[+]20180208 10:49:46 svc.bocommlife.com
+[+]20180208 10:49:46 [+]http://svc.bocommlife.com
+[+]20180208 10:50:04 [+]ResponseError:[Errno 10060]Connecttion refused.
+[+]20180208 10:50:04 [+]https://svc.bocommlife.com
+[+]20180208 10:50:04 [+]ResponseError:HTTP Error 504: Gateway Timeout
+[+]20180208 10:50:04 devapp.bocommlife.com
+[+]20180208 10:50:04 [+]http://devapp.bocommlife.com
+[+]20180208 10:50:04 [+]ResponseError:HTTP Error 504: Gateway Timeout
+[+]20180208 10:50:04 [+]https://devapp.bocommlife.com
+[+]20180208 10:50:18 [+]ResponseError:[Errno 10060]Connecttion refused.
+[+]20180208 10:50:18 devintra.bocommlife.com
+[+]20180208 10:50:18 [+]http://devintra.bocommlife.com
+[+]20180208 10:50:18 [+]ResponseError:[Errno 11001]Cannot visit, no ip can't get host.
+[+]20180208 10:50:18 [+]https://devintra.bocommlife.com
+[+]20180208 10:50:18 [+]ResponseError:[Errno 11001]Cannot visit, no ip can't get host.
+[+]20180208 10:50:18 devsvc.bocommlife.com
+[+]20180208 10:50:18 [+]http://devsvc.bocommlife.com
+[+]20180208 10:50:18 [+]rescode:200
+[+]20180208 10:50:18 [+]https://devsvc.bocommlife.com
+[+]20180208 10:50:18 [+]ResponseError:HTTP Error 504: Gateway Timeout
+[+]20180208 10:50:18 app.bocommlife.com
+[+]20180208 10:50:18 [+]http://app.bocommlife.com
+[+]20180208 10:50:18 [+]rescode:200
+[+]20180208 10:50:18 [+]https://app.bocommlife.com
+[+]20180208 10:50:35 [+]ResponseError:[Errno 10060]Connecttion refused.
