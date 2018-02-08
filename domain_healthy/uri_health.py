@@ -78,16 +78,15 @@ def gethttp(reurl_http):
         print 'rescode:'+str(response.getcode())+' '+'\n',
         res_output="rescode:"+str(response.getcode())
         output("[+]"+res_output)
-        # ---------------
         #
-        # 对页面进行逻辑判断，200正常，300跳转，response为None(nonetype)不能访问，转下一步
-        # if re(str(response.getcode()),r"30[0-9]"):
-        #     #获取跳转之后的url
-        #     res = requests.head(url)
-        #     global relocation
-        #     relocation=res.headers['Location']  #全局调用的重定向relocation
-        #     print "jump:"+location,
-        #     output("jump:"+location+'\n')
+        # 实例化opener继承class SmartRedirectHandler。获取重定向地址relocation
+        #
+        if response.getcode()==300 or response.getcode()==301:
+            opener = urllib2.build_opener(SmartRedirectHandler)
+            global relocation
+            relocation=opener.open(reurl_http)
+            print "redirect:"+relocation
+            output("redirect:"+str(relocation))
         return page,str(response.getcode())
     except Exception,e:
         print "ResponseError:",
@@ -96,9 +95,17 @@ def gethttp(reurl_http):
             e="Using SSLv3 not secure.[SSL: SSLV3_ALERT_HANDSHAKE_FAILURE]"
         elif str(e)=="<urlopen error [Errno 10061] >" or str(e)=="<urlopen error [Errno 10060] >":
             e="Connecttion refused.[Errno 10060]"
+        elif str(e)=="<urlopen error [Errno 11001] getaddrinfo failed>"
+            e="Cannot visit, no ip can't get host."
         print e
         output("[+]ResponseError:"+str(e))
         return "can't connect.","error"  #防止nonetype回传
+
+
+
+
+
+
 
 
 
@@ -203,6 +210,35 @@ def htag_check(soup):
         output("htag error! ")
         return 0
         pass
+
+
+
+class SmartRedirectHandler(urllib2.HTTPRedirectHandler):
+    RedURLs301 = []
+    RedURLs302 = []
+
+    def Getredurl301(self):
+        return SmartRedirectHandler.RedURLs301
+
+    def Getredurl302(self):
+        return SmartRedirectHandler.RedURLs302
+
+    def http_error_301(self, req, fp, code, msg, headers):
+        if headers.has_key("Location"):
+            SmartRedirectHandler.RedURLs301.append(headers["Location"])
+        result = urllib2.HTTPRedirectHandler.http_error_301(
+            self, req, fp, code, msg, headers)
+        return result
+
+    def http_error_302(self, req, fp, code, msg, headers):
+        if headers.has_key("Location"):
+            SmartRedirectHandler.RedURLs302.append(headers["Location"])
+        result = urllib2.HTTPRedirectHandler.http_error_302(
+            self, req, fp, code, msg, headers)
+        return result
+
+
+
 #main
 #实现主逻辑
 #   基本逻辑：
