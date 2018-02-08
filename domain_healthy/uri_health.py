@@ -72,7 +72,6 @@ def gethttp(reurl_http):
     # 尝试获取页面，错误则获取错误页面同时调用getUrl_multiTry重试几次，错误则写入文件，正确则返回page
     #
     try:
-
         response=urllib2.urlopen(req,timeout=18)
         page=response.read()
         # output---------
@@ -86,7 +85,7 @@ def gethttp(reurl_http):
         #     #获取跳转之后的url
         #     res = requests.head(url)
         #     global relocation
-        #     relocation=res.headers['Location']  #全局调用的重定向relocation
+        #     relocation=res.headers['Location']  #全局调用的重定向relocation 
         #     print "jump:"+location,
         #     output("jump:"+location+'\n')
         return page,str(response.getcode())
@@ -98,8 +97,6 @@ def gethttp(reurl_http):
         elif str(e)=="<urlopen error [Errno 10061] >" or str(e)=="<urlopen error [Errno 10060] >":
             e="Connecttion refused."
         print e
-        #解决 hostname 'www.sdeyei-h.edu' doesn't match either of '*.zwjk.com', 'zwjk.com'证书不匹配
-        # if str(e).startswith('hostname')
         output("[+]ResponseError:"+str(e))
         return "can't connect.","error"  #防止nonetype回传
 
