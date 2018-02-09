@@ -30,6 +30,11 @@ ssl._create_default_https_context = ssl._create_unverified_context
 # ssl_version=ssl.PROTOCOL_TLSv1
 # from urllib3.contrib import pyopenssl
 # pyopenssl.inject_into_urllib3()
+import socket
+import os
+
+
+
 
 
 #init
@@ -76,32 +81,37 @@ def gethttp(reurl_http):
     # 尝试获取页面，错误则获取错误页面同时调用getUrl_multiTry重试几次，错误则写入文件，正确则返回page
     #
     try:
-        response=urllib2.urlopen(req,timeout=18)
+        #fix:socket timeout.
+        timeout = 20
+        socket.setdefaulttimeout(timeout)
+        # -------------------------
+        response=urllib2.urlopen(req,timeout=8)
         page=response.read()
         # output---------
-        print 'Response:'+str(response.getcode())+' '+'\n',
+        print 'Response:'+str(response.getcode())+' ',
         res_output="Response:"+str(response.getcode())
         output("[+]"+res_output)
         #--------------------
         #
         # 实例化opener继承class SmartRedirectHandler。获取重定向地址relocation
         #
-        if response.getcode()==300 or response.getcode()==301:
-            opener = urllib2.build_opener(SmartRedirectHandler)
-            global relocation
-            relocation=opener.open(reurl_http)
-            print "redirect:"+relocation
-            output("redirect:"+str(relocation))
-            rescode=str(response.getcode())
-        head=response.info()
+        # if response.getcode()==300 or response.getcode()==301:
+        #     print response.getcode()
+            # opener = urllib2.build_opener(SmartRedirectHandler)
+            # global relocation
+            # relocation=opener.open(reurl_http)
+            # print "redirect:"+relocation
+            # output("redirect:"+str(relocation))
+            # rescode=str(response.getcode())
         #print head
+        head=response.info()
         try:
             re_header =head['server']
             print "Server: "+re_header
             server="Server: "+re_header
             output(server)
         except:
-            print "[-]Header didn't get server."
+            print "\n[-]Header didn't get server."
             output("[-]Header didn't get server.")
         return page,"access" #（等待开发，page通过opener获取，还没有合适的测试站，遇到再说）
     #
@@ -123,10 +133,17 @@ def gethttp(reurl_http):
 
 
 
-
-
-
-
+def getping(ip):
+    backinfo =  os.system('ping -c 1 -w 1 %s'%ip) # 实现pingIP地址的功能，-c1指发送报文一次，-w1指等待1秒
+    #print 'backinfo'
+    #print backinfo
+    #print type(backinfo)
+    if backinfo:
+        print '[-]Ping error.'
+        return "None"
+    else:
+        print "[+]Ping success."
+        return ip
 
 
 
@@ -304,7 +321,7 @@ if __name__ == '__main__':
         # 获取ping的情况
         #
         #
-        #pingcheck(n)
+        pingstate=getping(n)
         print "end"
 
 
