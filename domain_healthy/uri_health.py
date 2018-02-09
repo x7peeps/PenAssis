@@ -32,7 +32,7 @@ ssl._create_default_https_context = ssl._create_unverified_context
 # pyopenssl.inject_into_urllib3()
 import socket
 import os
-
+from threading import Thread
 
 
 
@@ -264,9 +264,33 @@ class SmartRedirectHandler(urllib2.HTTPRedirectHandler):
         result = urllib2.HTTPRedirectHandler.http_error_302(
             self, req, fp, code, msg, headers)
         return result
-
-
-
+#
+# 对文件中批量内容过滤获取其中域名或ip部分
+#
+def filter_target(url):
+    try:
+        url=url.split("//")[1]
+    except:
+        pass
+    proto, rest = urllib.splittype(url)
+    #res, rest = urllib.splithost(rest)
+    # print "rest"+rest
+    #print "proto"+proto
+    # print "res:"+res
+    #print "unkonw" if not res else res
+    return proto
+#main
+#实现主逻辑
+#   基本逻辑：
+#     1. 抓response如果包含缺uri关键字（forbidden或apache或IBM或IIS或page not found或...），直接后追加“可访问无后缀”，满足此条件直接输出并跳出此次查询，不进行下面的操作；
+#     2. 所有response都应该判断是否含有title，如果有title则进行输出text，并追加域名后面；
+#         如果没有判断有没有h1标签或h2标签，输出h1和h2标签的值（it works页面使用h1,）；
+#     3. 如果有title，判断是否存在300+跳转，输出跳转的url，追加“正常访问”，输出url
+#
+#   实现规范输出，
+#输入：under_detection_targets.txt，每行一个域名不包含http/https
+#输出：
+#读取文件,获取response
 def main():
     #
     # 文件读取
@@ -282,19 +306,23 @@ def main():
 
     for n in url_target:  # n 目标文件中取出的不包含http/https的域名
         #（优化：去除文件中http、https、去除/后面的内容只保留域名）
+        n=filter_target(n)
         #
         output(str(n))
         print "Target:"+n
-        #
-        #
+        # ----------------------------
         # 获取请求的页面以及页面状态码
         # 可选项:location(开发阻塞)
         #
         response_http,pagecode_http=gethttp("http://"+n)
         response_https,pagecode_https=gethttp("https://"+n)
+        # ------------------------------------
         #
         # 针对三种返回状态进行处理,得出服务器关闭，无法访问页面，web服务正常，
+        # functions
+        # ------------------------------------
         #
+        # 获取IP
         try:
             ip = socket.gethostbyname(n)
             print "[+]Getip: "+ip
@@ -304,32 +332,22 @@ def main():
             getip_error="[!]Python socket couldn't get IP."
             output(getip_error)
             pass
-            #(后续要补上)
+        #(后续要补上)
+        # ----------------------------
         #
         # 获取ping的情况
         #
         #
         pingstate=getping(n)
         print "end"
+        # ---------------------------
 
 
-#main
-#实现主逻辑
-#   基本逻辑：
-#     1. 抓response如果包含缺uri关键字（forbidden或apache或IBM或IIS或page not found或...），直接后追加“可访问无后缀”，满足此条件直接输出并跳出此次查询，不进行下面的操作；
-#     2. 所有response都应该判断是否含有title，如果有title则进行输出text，并追加域名后面；
-#         如果没有判断有没有h1标签或h2标签，输出h1和h2标签的值（it works页面使用h1,）；
-#     3. 如果有title，判断是否存在300+跳转，输出跳转的url，追加“正常访问”，输出url
-#
-#   实现规范输出，
-#输入：under_detection_targets.txt，每行一个域名不包含http/https
-#输出：
-#读取文件,获取response
+
 if __name__ == '__main__':
     # ----------------------------------------
     # add: 中断，在主程序运行过程中可随时键盘中断
     #
-    from threading import Thread
     class CountDown(Thread):
         def __init__(self):
             super(CountDown, self).__init__()
@@ -338,7 +356,7 @@ if __name__ == '__main__':
             main()
             print('slave end')
 
-    print('main start')
+    print('[!]KeyboardInterrupt started listen.')
     td = CountDown()
     td.setDaemon(True)
     td.start()
@@ -347,7 +365,7 @@ if __name__ == '__main__':
             pass
     except KeyboardInterrupt:
         print('stopped by keyboard')
-    print('main end')
+    print('[!]KeyboardInterrupt end')
     #-------------------------------------
 
 
