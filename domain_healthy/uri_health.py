@@ -140,10 +140,14 @@ def getping(ip):
     #print backinfo
     #print type(backinfo)
     if backinfo:
-        print '[-]Ping error.'
+        text="[-]Ping error."
+        output(text)
+        print text
         return "None"
     else:
-        print "[+]Ping success."
+        text="[+]Ping success."
+        output(text)
+        print text
         return ip
 
 
@@ -336,8 +340,6 @@ def main():
         # ----------------------------
         #
         # 获取ping的情况
-        #
-        #
         pingstate=getping(n)
         print "end"
         # ---------------------------
@@ -365,7 +367,7 @@ if __name__ == '__main__':
             pass
     except KeyboardInterrupt:
         print('stopped by keyboard')
-    print('[!]KeyboardInterrupt end')
+    print('[!]KeyboardInterrupt quited listen')
     #-------------------------------------
 
 
