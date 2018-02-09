@@ -134,6 +134,7 @@ def gethttp(reurl_http):
 
 
 def getping(ip):
+    print "[+]Starting ping:"
     backinfo =  os.system('ping -c 1 -w 1 %s'%ip) # 实现pingIP地址的功能，-c1指发送报文一次，-w1指等待1秒
     #print 'backinfo'
     #print backinfo
@@ -266,40 +267,28 @@ class SmartRedirectHandler(urllib2.HTTPRedirectHandler):
 
 
 
-#main
-#实现主逻辑
-#   基本逻辑：
-#     1. 抓response如果包含缺uri关键字（forbidden或apache或IBM或IIS或page not found或...），直接后追加“可访问无后缀”，满足此条件直接输出并跳出此次查询，不进行下面的操作；
-#     2. 所有response都应该判断是否含有title，如果有title则进行输出text，并追加域名后面；
-#         如果没有判断有没有h1标签或h2标签，输出h1和h2标签的值（it works页面使用h1,）；
-#     3. 如果有title，判断是否存在300+跳转，输出跳转的url，追加“正常访问”，输出url
-#
-#   实现规范输出，
-#输入：under_detection_targets.txt，每行一个域名不包含http/https
-#输出：
-#读取文件,获取response
-if __name__ == '__main__':
+def main():
     #
     # 文件读取
     #
     try:
         urllist=open('under_detection_targets.txt','r')
         url_target=urllist.readlines()
-        url_target=[n.rstrip("\n") for n in url_target] ##fix bug: ValueError: Invalid header value 'https://xxx.com\n'，优化：由于从target中读取的列表都带换行符，这里去掉列表中的"\n"
+        url_target=[n.rstrip("\n") for n in url_target] # fix bug: ValueError: Invalid header value 'https://xxx.com\n'，优化：由于从target中读取的列表都带换行符，这里去掉列表中的"\n"
         #print url_target
         #pdb.set_trace()  #debug
     except:
         print "[!]读取under_detection_targets.txt失败，请确保当前目录存在under_detection_targets.txt且含有内容。"
-    for n in url_target:
+
+    for n in url_target:  # n 目标文件中取出的不包含http/https的域名
+        #（优化：去除文件中http、https、去除/后面的内容只保留域名）
+        #
         output(str(n))
         print "Target:"+n
         #
-        # 连接并接收http请求
-        #
-        #pdb.set_trace()#debug
         #
         # 获取请求的页面以及页面状态码
-        # 可选项:location
+        # 可选项:location(开发阻塞)
         #
         response_http,pagecode_http=gethttp("http://"+n)
         response_https,pagecode_https=gethttp("https://"+n)
@@ -316,7 +305,6 @@ if __name__ == '__main__':
             output(getip_error)
             pass
             #(后续要补上)
-
         #
         # 获取ping的情况
         #
@@ -325,20 +313,59 @@ if __name__ == '__main__':
         print "end"
 
 
+#main
+#实现主逻辑
+#   基本逻辑：
+#     1. 抓response如果包含缺uri关键字（forbidden或apache或IBM或IIS或page not found或...），直接后追加“可访问无后缀”，满足此条件直接输出并跳出此次查询，不进行下面的操作；
+#     2. 所有response都应该判断是否含有title，如果有title则进行输出text，并追加域名后面；
+#         如果没有判断有没有h1标签或h2标签，输出h1和h2标签的值（it works页面使用h1,）；
+#     3. 如果有title，判断是否存在300+跳转，输出跳转的url，追加“正常访问”，输出url
+#
+#   实现规范输出，
+#输入：under_detection_targets.txt，每行一个域名不包含http/https
+#输出：
+#读取文件,获取response
+if __name__ == '__main__':
+    # ----------------------------------------
+    # add: 中断，在主程序运行过程中可随时键盘中断
+    #
+    from threading import Thread
+    class CountDown(Thread):
+        def __init__(self):
+            super(CountDown, self).__init__()
+        def run(self):
+            print('slave start')
+            main()
+            print('slave end')
 
-        # debug：正常情况测试
-        #---------start----------
-        #print "[D]http debug"
-        #pdb.set_trace() #debug
-        # --------end---------------
+    print('main start')
+    td = CountDown()
+    td.setDaemon(True)
+    td.start()
+    try:
+        while td.isAlive():
+            pass
+    except KeyboardInterrupt:
+        print('stopped by keyboard')
+    print('main end')
+    #-------------------------------------
 
-        #-------异常捕获标准-------
-        # except Exception,e:
-        #     print 'str(Exception):\t', str(Exception)
-        #     print "e:\t\t",e
-        #     print 'str(e):\t\t', str(e)   #用于输出
-        #     print 'repr(e):\t', repr(e)
-        #     print 'e.message:\t', e.message
-        #     print 'traceback.print_exc():'; traceback.print_exc()
-        #     print 'traceback.format_exc():\n%s' % traceback.format_exc()  #详细
-        #     print e  #缩略用于判断
+
+
+
+# debug：正常情况测试
+#---------start----------
+#print "[D]http debug"
+#pdb.set_trace() #debug
+# --------end---------------
+
+#-------异常捕获标准-------
+# except Exception,e:
+#     print 'str(Exception):\t', str(Exception)
+#     print "e:\t\t",e
+#     print 'str(e):\t\t', str(e)   #用于输出
+#     print 'repr(e):\t', repr(e)
+#     print 'e.message:\t', e.message
+#     print 'traceback.print_exc():'; traceback.print_exc()
+#     print 'traceback.format_exc():\n%s' % traceback.format_exc()  #详细
+#     print e  #缩略用于判断
