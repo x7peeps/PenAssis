@@ -274,15 +274,31 @@ class SmartRedirectHandler(urllib2.HTTPRedirectHandler):
 def filter_target(url):
     try:
         url=url.split("//")[1]
+        print url
     except:
         pass
-    proto, rest = urllib.splittype(url)
-    #res, rest = urllib.splithost(rest)
-    # print "rest"+rest
-    #print "proto"+proto
-    # print "res:"+res
-    #print "unkonw" if not res else res
-    return proto
+    try:
+        url=url.split(":")[0]
+        print url
+    except:
+        pass
+    try:
+        url=url.split("/")[0]
+        print url
+    except:
+        pass
+    # try:
+
+    try:
+        proto, rest = urllib.splittype(url)
+        host, rest = urllib.splithost(rest)
+        print host
+        host, port = urllib.splitport(host)
+        return host
+    except:
+        print url
+        return url
+
 #main
 #实现主逻辑
 #   基本逻辑：
@@ -357,7 +373,6 @@ if __name__ == '__main__':
             print('slave start')
             main()
             print('slave end')
-
     print('[!]KeyboardInterrupt started listen.')
     td = CountDown()
     td.setDaemon(True)
