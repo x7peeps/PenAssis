@@ -46,7 +46,7 @@ data=time.strftime('urlcheck '+'%Y-%m-%d',time.localtime(time.time()))
 file_object = open(data+'.txt','w')
 file_object.close()
 
-
+#socket.setdefaulttimeout(10.0)
 
 
 #function
@@ -130,7 +130,11 @@ def gethttp(reurl_http):
         print exr
         output(exr)
         return "can't connect.","urlerror"
-
+    # fix bug: socket.timeout: timed out
+    except socket.timeout as e:
+        #print type(e)    #catched
+        print "timeout error catched"
+        return "can't connect.","urlerror"
 
 
 def getping(ip):
@@ -274,17 +278,17 @@ class SmartRedirectHandler(urllib2.HTTPRedirectHandler):
 def filter_target(url):
     try:
         url=url.split("//")[1]
-        print url
+        #print "remove //: "+url
     except:
         pass
     try:
         url=url.split(":")[0]
-        print url
+        #print "remove :: "+url
     except:
         pass
     try:
         url=url.split("/")[0]
-        print url
+        #print "remove /: "+url
     except:
         pass
     # try:
@@ -292,11 +296,12 @@ def filter_target(url):
     try:
         proto, rest = urllib.splittype(url)
         host, rest = urllib.splithost(rest)
-        print host
+        #print "1:"+host
         host, port = urllib.splitport(host)
+        #print "2:"+host
         return host
     except:
-        print url
+        #print url,type(url)
         return url
 
 #main
@@ -323,7 +328,6 @@ def main():
         #pdb.set_trace()  #debug
     except:
         print "[!]读取under_detection_targets.txt失败，请确保当前目录存在under_detection_targets.txt且含有内容。"
-
     for n in url_target:  # n 目标文件中取出的不包含http/https的域名
         #（优化：去除文件中http、https、去除/后面的内容只保留域名）
         n=filter_target(n)
@@ -334,6 +338,7 @@ def main():
         # 获取请求的页面以及页面状态码
         # 可选项:location(开发阻塞)
         #
+        print "n is:"+n
         response_http,pagecode_http=gethttp("http://"+n)
         response_https,pagecode_https=gethttp("https://"+n)
         # ------------------------------------
