@@ -12,6 +12,11 @@
 #     3. 如果有title，判断是否存在300+跳转，输出跳转的url，追加“正常访问”，输出url
 #     4.
 #   实现规范输出，
+
+
+
+#
+# 准备引入谷歌代码规范：http://zh-google-styleguide.readthedocs.io/en/latest/google-python-styleguide/python_language_rules/
 import urllib,urllib2
 from bs4 import BeautifulSoup
 import time
