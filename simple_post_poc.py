@@ -2,7 +2,7 @@
 # -*- coding: UTF-8 -*-
 # by xt.
 # 日常，仅供学习交流。xt.
-# 
+#
 # 功能描述：
 #	实现一个简单的poc
 # 	实现对下列类型普通post的某参数的简单payload应用
@@ -13,7 +13,7 @@
 #	payload 引用file，并参数化
 #	http，https兼容性
 #	等等
-#	
+#
 """
 POST /target_post_position HTTP/1.1
 Host: target.com
@@ -70,6 +70,7 @@ text=""
 
 # function 函数
 def getHtml(reurl,payload_id):
+    #testdata为post数据
     testdata=TestDATA = {'id': payload_id,'empMobile': '0','mobile':'0'}
     testdata = urllib.urlencode(TestDATA)
     req=urllib2.Request(url=reurl,headers=header,data=testdata)
@@ -108,7 +109,7 @@ def getresult(payload_num):
 
 
 # main 主程序
-# 
+#
 # 生成payload list，
 for num in range(payload_max):
     getresult(num)
