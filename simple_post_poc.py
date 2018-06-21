@@ -50,6 +50,7 @@ payload_max=9999
 # init 初始化
 target="http://target_post_position"
 header={"Host": "qyh.bocommlife.com",
+header={"Host": host,
 "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:59.0) Gecko/20100101 Firefox/59.0"
 ,"Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
 "Accept-Language": "zh-CN",

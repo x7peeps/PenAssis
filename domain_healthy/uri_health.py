@@ -38,7 +38,9 @@ ssl._create_default_https_context = ssl._create_unverified_context
 import socket
 import os
 from threading import Thread
-
+from ssl import SSLError
+from gevent import monkey
+monkey.patch_socket()
 
 
 #init
@@ -77,7 +79,7 @@ def output(texts):
 # ---------------------------------------------------
 def gethttp(reurl_http):
     # 逻辑：尝试不加头部请求，如果不成功则加head头重新请求geturl_multiTry()。
-    #reurl_http="http://"+reurl
+    # reurl_http="http://"+reurl
     print '[+]'+reurl_http+' ',
     output('[+]'+reurl_http)
     req=urllib2.Request(reurl_http)
@@ -89,7 +91,14 @@ def gethttp(reurl_http):
         timeout = 20
         socket.setdefaulttimeout(timeout)
         # -------------------------
-        response=urllib2.urlopen(req,timeout=8)
+        # try:
+        response=urllib2.urlopen(req,timeout=5)
+        # # https请求时，某些url，SSLError: ('The read operation timed out',)
+        # except:
+        #     # req.add_header('Referer', reurl_http)
+        #     # req=urllib2.Request(reurl_http)
+        #     # response=urllib2.urlopen(req)
+        #     pass
         page=response.read()
         # output---------
         print 'Response:'+str(response.getcode())+' ',
@@ -139,6 +148,12 @@ def gethttp(reurl_http):
         #print type(e)    #catched
         print "timeout error catched"
         return "can't connect.","urlerror"
+    except (SSLError, socket.timeout) as error:
+        err_s = str(error)
+        if 'operation timed out' in err_s:
+            print ("ssl operation timed out")
+            raise
+        raise NetworkError(err_s)
 
 
 def getping(ip):
@@ -342,7 +357,7 @@ def main():
         # 获取请求的页面以及页面状态码
         # 可选项:location(开发阻塞)
         #
-        print "n is:"+n
+        #print "n is:"+n
         response_http,pagecode_http=gethttp("http://"+n)
         response_https,pagecode_https=gethttp("https://"+n)
         # ------------------------------------
@@ -380,7 +395,10 @@ if __name__ == '__main__':
             super(CountDown, self).__init__()
         def run(self):
             print('slave start')
+            # --------------
+            # 主函数start
             main()
+            # --------------
             print('slave end')
     print('[!]KeyboardInterrupt started listen.')
     td = CountDown()
