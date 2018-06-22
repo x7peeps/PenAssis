@@ -11,9 +11,11 @@ import getopt
 from threading import Thread
 from colorama import init,Fore
 from urllib2 import Request, urlopen, URLError, HTTPError
-import socket
+import socket,errno 
 from ssl import SSLError
 import ssl
+
+
 
 # 全局取消证书
 ssl._create_default_https_context = ssl._create_unverified_context
@@ -27,51 +29,58 @@ sys.setdefaultencoding('utf-8') #gbk 也乱码
 
 
 # fix bug: IncompleteRead: IncompleteRead(5263 bytes read)-----
-httplib.HTTPConnection._http_vsn = 10  
-httplib.HTTPConnection._http_vsn_str = 'HTTP/1.0'  
+httplib.HTTPConnection._http_vsn = 10
+httplib.HTTPConnection._http_vsn_str = 'HTTP/1.0'
 #------
 
+# fix bug: python socket 超时设置 errno 10054------
+timeout = 20
+socket.setdefaulttimeout(timeout)#这里对整个socket层设置超时时间。后续文件中如果再使用到socket，不必再设置
+sleep_download_time = 10
+#-----
 
-def http_get(url):  
-    request = urllib2.Request(url)  
-    request.get_method = lambda:'GET'           # 设置HTTP的访问方式  
-    request = urllib2.urlopen(request,timeout=20)  
-    reqback=request.read()    
+def http_get(url):
+    time.sleep(2)
+    head = {'User-agent' : 'Mozilla/5.0 (Windows NT 6.2; WOW64; rv:22.0) Gecko/20100101 Firefox/22.0'}
+    request = urllib2.Request(url,headers=head)
+    request.get_method = lambda:'GET'           # 设置HTTP的访问方式
+    request = urllib2.urlopen(request,timeout=20)
+    reqback=request.read()
     request.close()#记得要关闭
     return reqback
 
-def http_options(url):     
-    request = urllib2.Request(url)  
-    request.get_method = lambda:'OPTIONS'           # 设置HTTP的访问方式  
-    request = urllib2.urlopen(request,timeout=20)  
-    reqback=request.read()    
+def http_options(url):
+    request = urllib2.Request(url)
+    request.get_method = lambda:'OPTIONS'           # 设置HTTP的访问方式
+    request = urllib2.urlopen(request,timeout=20)
+    reqback=request.read()
     request.close()#记得要关闭
     return reqback
 
-def http_trace(url):     
-    request = urllib2.Request(url)  
-    request.get_method = lambda:'TRACE'           # 设置HTTP的访问方式  
-    request = urllib2.urlopen(request,timeout=20) 
-    reqback=request.read()    
+def http_trace(url):
+    request = urllib2.Request(url)
+    request.get_method = lambda:'TRACE'           # 设置HTTP的访问方式
+    request = urllib2.urlopen(request,timeout=20)
+    reqback=request.read()
     request.close()#记得要关闭
     return reqback
 
-def http_put(url):   
+def http_put(url):
 	url = url+'/hEaD.txt'
-	request = urllib2.Request(url) #,headers= headers)  
-	request.get_method = lambda:'PUT'           # 设置HTTP的访问方式  
+	request = urllib2.Request(url) #,headers= headers)
+	request.get_method = lambda:'PUT'           # 设置HTTP的访问方式
 	request = urllib2.urlopen(request,timeout=20)
 	reqback=request.read()
 	request.close() #记得要关闭
 	return reqback
 
-def http_delete(url):  
-    url=url+'/hEaD.txt'  
+def http_delete(url):
+    url=url+'/hEaD.txt'
     request = urllib2.Request(url)
-    #request.add_header('Content-Type', 'your/conntenttype')  
-    request.get_method = lambda:'DELETE'        # 设置HTTP的访问方式  
-    request = urllib2.urlopen(request,timeout=20) 
-    reqback=request.read()    
+    #request.add_header('Content-Type', 'your/conntenttype')
+    request.get_method = lambda:'DELETE'        # 设置HTTP的访问方式
+    request = urllib2.urlopen(request,timeout=20)
+    reqback=request.read()
     request.close()#记得要关闭
     return reqback
 
@@ -85,7 +94,7 @@ def output(texts):
 
 def method_test(url):
 	# print url
-#test GET
+	#test GET
 	try:
 		print 'GET: ',
 		resg = http_get(url)
@@ -120,10 +129,19 @@ def method_test(url):
 	except httplib.BadStatusLine:
 		print Fore.RED+"BadStatusLine",
 		pass
+	except socket.error as error:
+	    if error.errno == errno.WSAECONNRESET:
+	        # reconnect()
+	        # retry_action()
+	        print Fore.RED+"socket error WSAECONNRESET",
+	        pass
+	    else:
+	        raise
+	        pass
 	print Fore.WHITE
 
 
-#test OPTIONS	
+	#test OPTIONS
 	try:
 		print 'OPTIONS: ',
 		reso = http_options(url)
@@ -160,15 +178,24 @@ def method_test(url):
 	except httplib.BadStatusLine:
 		print Fore.RED+"BadStatusLine",
 		pass
+	except socket.error as error:
+	    if error.errno == errno.WSAECONNRESET:
+	        # reconnect()
+	        # retry_action()
+	        print Fore.RED+"socket error WSAECONNRESET",
+	        pass
+	    else:
+	        raise
+	        pass
 	print Fore.WHITE
 
-#test put
+	#test put
 	try:
 		print 'PUT:',
 		resp = http_put(url)
 		print Fore.GREEN+'[!]Worning PUT Method found:'+url,
 		output('[!]Worning PUT Method found:'+url)
-		output(resp) 
+		output(resp)
 		#print resp,
 	except HTTPError, e:
 	    #print 'The server couldn\'t fulfill the request.'
@@ -200,9 +227,18 @@ def method_test(url):
 	except httplib.BadStatusLine:
 		print Fore.RED+"BadStatusLine",
 		pass
+	except socket.error as error:
+	    if error.errno == errno.WSAECONNRESET:
+	        # reconnect()
+	        # retry_action()
+	        print Fore.RED+"socket error WSAECONNRESET",
+	        pass
+	    else:
+	        raise
+	        pass
 	print Fore.WHITE
 
-#test delete
+	#test delete
 	try:
 		print 'delete: ',
 		resd = http_delete(url)
@@ -240,11 +276,20 @@ def method_test(url):
 	except httplib.BadStatusLine:
 		print Fore.RED+"BadStatusLine",
 		pass
+	except socket.error as error:
+	    if error.errno == errno.WSAECONNRESET:
+	        # reconnect()
+	        # retry_action()
+	        print Fore.RED+"socket error WSAECONNRESET",
+	        pass
+	    else:
+	        raise
+	        pass
 	print Fore.WHITE
 
 
 
-# test trace
+	# test trace
 	try:
 		print 'trace: ',
 		rest=http_trace(url)
@@ -282,6 +327,15 @@ def method_test(url):
 	except httplib.BadStatusLine:
 		print Fore.RED+"BadStatusLine",
 		pass
+	except socket.error as error:
+	    if error.errno == errno.WSAECONNRESET:
+	        # reconnect()
+	        # retry_action()
+	        print Fore.RED+"socket error WSAECONNRESET",
+	        pass
+	    else:
+	        raise
+	        pass
 	print Fore.WHITE
 
 # main主逻辑
@@ -293,7 +347,7 @@ def main():
         url_target=[n.rstrip("\n") for n in url_target]
     except:
         print "[!]读取under_detection_targets.txt失败，请确保当前目录存在targets.txt且含有内容。"
-    for n in url_target:  
+    for n in url_target:
         output(str(n))
         print Fore.WHITE+"Target:"+n
         method_test(n)
