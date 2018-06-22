@@ -11,7 +11,7 @@ import getopt
 from threading import Thread
 from colorama import init,Fore
 from urllib2 import Request, urlopen, URLError, HTTPError
-import socket,errno 
+import socket,errno
 from ssl import SSLError
 import ssl
 
@@ -368,11 +368,11 @@ if __name__ == '__main__':
         # print opts
         # print args
 	except getopt.GetoptError:
-	    print 'method_test.py [option] [parameter]\t\n-u <url>\n-r <FilePath>'
+	    print 'method_test.py [option] [parameter]\t\n-h this help\n-u <url>\n-r <FilePath>'
 	    sys.exit(2)
 	for opt, arg in opts:
 	    if opt == '-h':
-	        print 'method_test.py [option] [parameter]\t\n-u <url>\n-r <FilePath> '
+	        print 'method_test.py [option] [parameter]\t\n-h this help\n-u <url>\n-r <FilePath> '
 	        sys.exit()
 	    elif opt in ("-u", "--url"):
 	        single_url = arg
